@@ -1,0 +1,68 @@
+       
+# Testing a Engineering Notation routine
+print ("Convert Meter Measurement to Engineering Notation \n")
+
+def ENGR(number, sigDigits=3):
+    ''' Converts a string or number to engineering notation with a maximum number of significant digits. 
+        A set number of significant digits would require trailing zeros, replacing (round). 
+    '''
+    from math import floor, log10
+
+    # Check to make sure the input will not break the script
+    try : # check for correct input to the function
+        sigDigits = int (sigDigits)
+    except ValueError as e: 
+        print(e)
+        print ("    The string input for significant digits could not be converted to an intager \n    Set to 3 significant digits")
+        sigDigits =3
+    try : # check for correct input to the function
+        number = float (number)
+    except ValueError as e: 
+        print(e)
+        print ("    The string from the meter could not be converted to a float number")
+    else:
+        if number == (0):# Special case for 0. Might indicate something is wrong. 0.0 is a very unlikely value. May want to set a warning.
+            return str(number)
+
+        # Calculates the base, expontent, and significat digits to return
+        exponent = floor (log10(abs(number)))
+        modulo = exponent%3
+        base = (sigDigits-1)-modulo
+        modExp = exponent-modulo
+        roundTo = str(round((number/10**modExp),base))
+
+        # Assembling the string adding the International System of Units (SI) prefixes
+        if modExp == -15:
+            return str(roundTo) + ' f'
+        if modExp == -12:
+            return str(roundTo) + ' p'
+        if modExp == -9:
+            return str(roundTo) + ' n'
+        if modExp == -6:
+            return str(roundTo) + ' u'
+        if modExp == -3:
+            return str(roundTo) + ' m'            
+        if modExp == 0:
+            return str(roundTo)
+        if modExp == 3:
+            return str(roundTo) + ' k'
+        if modExp == 6:
+            return str(roundTo) + ' M'
+        if modExp == 9:
+            return str(roundTo) + ' G'
+        if modExp == 12:
+            return str(roundTo) + ' T'
+        if modExp == 15:
+            return str(roundTo) + ' P'
+        else:
+            return("Out of Range")
+
+sigDigits = input ("    Enter the number of significant digits. ")
+number = input ("    Enter the Meter Output. ")
+print ('')
+print (ENGR(number,sigDigits))
+print ('')
+
+
+
+
